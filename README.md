@@ -1,4 +1,4 @@
-toko inventoris 
+toko boria
 
 Data kelompok :
 - Andri Ahmad Iksan Ramadhani/25083000012
