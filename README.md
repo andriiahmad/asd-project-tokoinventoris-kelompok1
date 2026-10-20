@@ -1,8 +1,8 @@
-toko boria
+Toko Boria
 
 Data kelompok :
-- Andri Ahmad Iksan Ramadhani/25083000012
+- Andri Ahmad Iksan Ramadhani/25083000012 
 - Excel Bilqissiano/25083000016
-- Wijaya Eka Saputra/25083000019 
+- Wijaya Eka Saputra/25083000019 (ketua)
 
-Kasus yang dipilih : Toko Inventoris
+Tema yang dipilih : Toko Inventoris
