@@ -1,7 +1,9 @@
 import os
-from Fitur.produk import tambah_barang, tampilkan_barang
+
 from Fitur.pencarian import cari_barang
 from Fitur.penghapusan import hapus_barang
+from Fitur.produk import tambah_barang, tampilkan_barang
+from Fitur.update import update_harga, update_stok
 
 
 def bersihkan_terminal():
@@ -52,42 +54,52 @@ menu = [
     ("1", "Tambah Barang", "Input produk baru"),
     ("2", "Tampilkan Semua Data", "Lihat semua inventaris"),
     ("3", "Cari Data Barang", "Temukan produk"),
-    ("4", "Update Data Barang", "Ubah data produk"),
-    ("5", "Filter Data Barang", "Saring produk"),
+    ("4", "Update Stok Barang", "Ubah jumlah stok"),
+    ("5", "Update Harga Barang", "Ubah harga produk"),
     ("6", "Hapus Data Barang", "Hapus produk"),
     ("0", "Keluar", "Tutup aplikasi"),
 ]
 
-while True:
-    print("+" + "=" * lebar + "+")
-    print("|" + "TOKO BORIA".center(lebar) + "|")
-    print("|" + "TOKO INVENTARIS".center(lebar) + "|")
-    print("+" + "=" * lebar + "+")
-    print("|" + "Selamat datang! Kelola stok toko dengan mudah.".center(lebar) + "|")
-    print("+" + "=" * lebar + "+")
-    print("|" + "MENU UTAMA".center(lebar) + "|")
-    print("+" + "-" * lebar + "+")
 
-    for nomor, nama, keterangan in menu:
-        label = f"  [{nomor}]  {nama}"
-        print("|" + f"{label:<30}{keterangan:>24}" + "|")
-    print("+" + "=" * lebar + "+")
-    pilihan = input("Masukkan nomor menu pilihan Anda: ")
+def main():
+    while True:
+        print("+" + "=" * lebar + "+")
+        print("|" + "TOKO BORIA".center(lebar) + "|")
+        print("|" + "TOKO INVENTARIS".center(lebar) + "|")
+        print("+" + "=" * lebar + "+")
+        print("|" + "Selamat datang! Kelola stok toko dengan mudah.".center(lebar) + "|")
+        print("+" + "=" * lebar + "+")
+        print("|" + "MENU UTAMA".center(lebar) + "|")
+        print("+" + "-" * lebar + "+")
 
-    bersihkan_terminal()
+        for nomor, nama, keterangan in menu:
+            label = f"  [{nomor}]  {nama}"
+            print("|" + f"{label:<30}{keterangan:>24}" + "|")
+        print("+" + "=" * lebar + "+")
+        pilihan = input("Masukkan nomor menu pilihan Anda: ")
 
-    if pilihan == "0":
-        print("Terima kasih sudah menggunakan Toko Boria.")
-        break
-    elif pilihan == "1":
-        tambah_barang(Barang)
-    elif pilihan == "2":
-        tampilkan_barang(Barang)
-    elif pilihan == "3":
-        cari_barang(Barang)
-    elif pilihan == "6":
-        hapus_barang(Barang)
-    else:
-        print("Pilihan tidak tersedia. Silakan pilih menu 0 sampai 6.")
+        bersihkan_terminal()
 
-    input("\nTekan Enter untuk kembali ke menu...")
+        if pilihan == "0":
+            print("Terima kasih sudah menggunakan Toko Boria.")
+            break
+        elif pilihan == "1":
+            tambah_barang(Barang)
+        elif pilihan == "2":
+            tampilkan_barang(Barang)
+        elif pilihan == "3":
+            cari_barang(Barang)
+        elif pilihan == "4":
+            update_stok(Barang)
+        elif pilihan == "5":
+            update_harga(Barang)
+        elif pilihan == "6":
+            hapus_barang(Barang)
+        else:
+            print("Pilihan tidak tersedia. Silakan pilih menu 0 sampai 6.")
+
+        input("\nTekan Enter untuk kembali ke menu...")
+
+
+if __name__ == "__main__":
+    main()
