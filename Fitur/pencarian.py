@@ -1,29 +1,33 @@
-"""F3: pencarian barang menggunakan linear search."""
+"""F3: pencarian kode tepat atau nama sebagian (linear search)."""
 
-from Fitur.produk import tampilkan_barang
+from Fitur.produk import tampilkan_produk
 
 
-def cari_produk(barang, kata_kunci):
-    """Kembalikan semua produk dengan kode/nama yang cocok (case-insensitive)."""
-    kata_kunci = kata_kunci.strip().casefold()
-    if not kata_kunci:
+def cari_produk(daftar_produk, mode, kata_kunci):
+    """Hasil berupa list; mode hanya 'kode' atau 'nama'."""
+    kunci = kata_kunci.strip().casefold()
+    if not kunci or mode not in ("kode", "nama"):
         return []
-    return [
-        produk for produk in barang
-        if kata_kunci in produk["kode"].casefold()
-        or kata_kunci in produk["nama_barang"].casefold()
-    ]
+    if mode == "kode":
+        return [p for p in daftar_produk if p["kode_produk"].casefold() == kunci]
+    return [p for p in daftar_produk if kunci in p["nama"].casefold()]
 
 
-def cari_barang(barang):
-    """Antarmuka CLI pencarian produk."""
-    kata_kunci = input("Masukkan kode atau nama barang: ").strip()
+def cari_barang(daftar_produk):
+    """Tanyakan mode pencarian kemudian tampilkan hasil."""
+    print("Mode pencarian: [1] Kode produk  [2] Nama produk")
+    pilihan = input("Pilih mode (1/2): ").strip()
+    if pilihan not in ("1", "2"):
+        print("Mode pencarian tidak valid. Pilih 1 atau 2.")
+        return
+    mode = "kode" if pilihan == "1" else "nama"
+    kata_kunci = input(f"Masukkan {mode} produk: ").strip()
     if not kata_kunci:
         print("Kata kunci tidak boleh kosong.")
         return
-    hasil = cari_produk(barang, kata_kunci)
+    hasil = cari_produk(daftar_produk, mode, kata_kunci)
     if not hasil:
-        print("Barang tidak ditemukan.")
+        print(f"Produk dengan {mode} '{kata_kunci}' tidak ditemukan.")
         return
-    print(f"Ditemukan {len(hasil)} barang:")
-    tampilkan_barang(hasil)
+    print(f"Ditemukan {len(hasil)} produk.")
+    tampilkan_produk(hasil)

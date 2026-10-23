@@ -1,41 +1,30 @@
-"""F6: hapus barang berdasarkan kode unik dengan konfirmasi."""
+"""F6: hapus produk menggunakan kode unik dengan konfirmasi."""
 
-from Fitur.produk import tampilkan_barang
-
-
-def hapus_produk(barang, kode):
-    """Hapus produk sesuai kode; kembalikan True jika berhasil."""
-    kode = kode.strip().casefold()
-    if not kode:
-        return False
-    for index, produk in enumerate(barang):
-        if produk["kode"].casefold() == kode:
-            barang.pop(index)
-            return True
-    return False
+from Fitur.produk import cari_kode_produk
 
 
-def hapus_barang(barang):
-    """Antarmuka CLI penghapusan dengan konfirmasi."""
-    kode = input("Masukkan kode barang yang akan dihapus: ").strip()
-    if not kode:
-        print("Kode barang tidak boleh kosong.")
-        return
-    produk = next(
-        (item for item in barang if item["kode"].casefold() == kode.casefold()),
-        None,
-    )
+def hapus_produk(daftar_produk, kode_produk):
+    """Hapus berdasarkan kode tepat; kembalikan produk yang dihapus atau None."""
+    produk = cari_kode_produk(daftar_produk, kode_produk)
     if produk is None:
-        print("Barang tidak ditemukan.")
-        return
+        return None
+    daftar_produk.remove(produk)
+    return produk
 
-    tampilkan_barang([produk])
-    konfirmasi = input("Yakin ingin menghapus barang ini? (y/n): ").strip().casefold()
+
+def hapus_barang(daftar_produk):
+    kode = input("Masukkan kode produk yang akan dihapus: ").strip()
+    if not kode:
+        print("Kode produk tidak boleh kosong.")
+        return
+    produk = cari_kode_produk(daftar_produk, kode)
+    if produk is None:
+        print(f"Produk dengan kode '{kode}' tidak ditemukan.")
+        return
+    print(f"Produk yang akan dihapus: {produk['nama']} ({produk['kode_produk']})")
+    konfirmasi = input("Yakin ingin menghapus? (y/n): ").strip().casefold()
     if konfirmasi != "y":
         print("Penghapusan dibatalkan.")
         return
-
-    if hapus_produk(barang, kode):
-        print("Barang berhasil dihapus.")
-    else:
-        print("Barang tidak ditemukan.")
+    hapus_produk(daftar_produk, kode)
+    print(f"Produk {produk['nama']} berhasil dihapus dari sistem.")
