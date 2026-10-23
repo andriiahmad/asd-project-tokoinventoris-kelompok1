@@ -1,25 +1,38 @@
-# Anggota 2 — F3 Cari Barang dan F6 Hapus Barang
+# Dokumentasi Anggota 2 — F3 dan F6
 
-## Lingkup
-- F3: Linear search terhadap `list of dict` berdasarkan kode atau sebagian nama (tanpa membedakan huruf besar/kecil).
-- F6: Hapus berdasarkan kode produk unik; CLI menampilkan data dan meminta konfirmasi `y` sebelum menghapus.
-- Seluruh perubahan bersifat in-memory. Tidak ada database maupun dependensi eksternal.
+Mengacu pada **Brief Project Tema 1 — Tahap 1 (Array & Struct)**, halaman 8–9.
 
-## Struktur data
-Produk memakai kunci `kode`, `nama_barang`, `kategori`, `harga`, `stok` sesuai `main.py`.
+## F3 — Cari Produk
 
-## Penggunaan
-Dari folder root:
+File: `Fitur/pencarian.py`.
 
-```bash
-python main.py
-```
+- Operator memilih mode **kode** (1) atau **nama** (2), kemudian mengetik kata kunci.
+- Pencarian **kode** memakai perbandingan **exact match** (`kode_produk`), maksimal satu hasil.
+- Pencarian **nama** memakai **partial match** (`nama`), dapat menghasilkan banyak produk.
+- Kedua mode mengabaikan perbedaan kapital. Kata kunci kosong ditolak.
+- Hasil ditampilkan dengan `tampilkan_produk` (format tabel sama seperti F2), plus jumlah hasil.
+- Jika tidak ditemukan, tampilkan `Produk dengan [kode/nama] '[kata kunci]' tidak ditemukan.`
 
-Pilih menu 3 untuk cari, atau menu 6 untuk hapus. Pencarian nama bisa menghasilkan beberapa produk, sedangkan penghapusan memerlukan kode yang tepat. Jawaban selain `y` membatalkan penghapusan.
+## F6 — Hapus Produk
+
+File: `Fitur/penghapusan.py`.
+
+- Operator memasukkan kode produk lengkap.
+- Jika ditemukan, program menampilkan **nama produk** sebelum meminta `y/n`.
+- Jawaban `y` menghapus produk dari list. Jawaban lain membatalkan penghapusan.
+- Jika tidak ditemukan, program menampilkan `Produk dengan kode '[kode]' tidak ditemukan.`
+- Hapus hanya mengubah data **in-memory**.
+
+## Struktur data wajib
+
+Setiap item berupa dictionary dengan key `kode_produk`, `nama`, `kategori`, `harga`, `stok`. Jangan mengganti key dengan `kode` atau `nama_barang` karena lima key tersebut wajib sesuai brief halaman 5.
 
 ## Pengujian
+
+Jalankan seluruh unit test dari root proyek:
+
 ```bash
-python -m unittest discover -s tests -v
+python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-Pengujian meliputi pencarian berdasarkan kode/nama, input kosong, data tidak ditemukan, penghapusan, dan konfirmasi/batal pada CLI.
+Test F3/F6 berada di `tests/test_pencarian_penghapusan.py`, termasuk exact-match kode, partial-match nama, mode invalid, kata kunci kosong, hasil tidak ditemukan, penghapusan berhasil, dan penghapusan dibatalkan.

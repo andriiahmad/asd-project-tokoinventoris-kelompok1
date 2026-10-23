@@ -1,5 +1,4 @@
-"""Uji integrasi alur menu 1 sampai 6 di entry point main()."""
-
+"""Skenario end-to-end: buat, tampil, cari, update, hapus, keluar."""
 import contextlib
 import io
 import unittest
@@ -8,39 +7,43 @@ from unittest.mock import patch
 import main as aplikasi
 
 
-class TestIntegrasiCLI(unittest.TestCase):
-    def test_alur_seluruh_menu(self):
-        barang = [dict(produk) for produk in aplikasi.Barang]
-        masukan = [
-            "1", "Susu UHT", "Minuman", "12000", "7", "",
+class TestCLI(unittest.TestCase):
+    def test_semua_menu(self):
+        daftar = []
+        urutan = [
+            "2", "",  # belum ada produk
+            "1", "PRD001", "Minyak Goreng", "Sembako", "15000", "8", "",
             "2", "",
-            "3", "susu", "",
-            "4", "BRG006", "9", "",
-            "5", "BRG006", "15000.5", "",
-            "6", "BRG006", "y", "",
+            "3", "1", "PRD001", "",
+            "3", "2", "goreng", "",
+            "4", "PRD001", "10", "",
+            "5", "PRD001", "15500.5", "",
+            "6", "PRD001", "n", "",
+            "6", "PRD001", "y", "",
             "0",
         ]
-        with patch.object(aplikasi, "Barang", barang), \
+        with patch.object(aplikasi, "daftar_produk", daftar), \
              patch.object(aplikasi, "bersihkan_terminal"), \
-             patch("builtins.input", side_effect=masukan), \
-             contextlib.redirect_stdout(io.StringIO()) as output:
+             patch("builtins.input", side_effect=urutan), \
+             contextlib.redirect_stdout(io.StringIO()) as out:
             aplikasi.main()
+        teks = out.getvalue()
+        self.assertIn("Belum ada produk yang tersimpan.", teks)
+        self.assertIn("Produk Minyak Goreng berhasil ditambahkan.", teks)
+        self.assertIn("Ditemukan 1 produk.", teks)
+        self.assertIn("Stok produk Minyak Goreng berhasil diperbarui: 8 menjadi 10", teks)
+        self.assertIn("Rp 15.500,50", teks)
+        self.assertIn("Penghapusan dibatalkan.", teks)
+        self.assertIn("Produk Minyak Goreng berhasil dihapus dari sistem.", teks)
+        self.assertEqual(daftar, [])
 
-        tulisan = output.getvalue()
-        self.assertIn("BRG006", tulisan)
-        self.assertIn("Ditemukan 1 barang", tulisan)
-        self.assertIn("Stok berhasil diperbarui: 7 -> 9", tulisan)
-        self.assertIn("Rp15.000,50", tulisan)
-        self.assertIn("Barang berhasil dihapus", tulisan)
-        self.assertIn("Terima kasih", tulisan)
-        self.assertEqual(len(barang), 5)
-
-    def test_pilihan_menu_invalid(self):
-        with patch.object(aplikasi, "bersihkan_terminal"), \
-             patch("builtins.input", side_effect=["x", "", "0"]), \
-             contextlib.redirect_stdout(io.StringIO()) as output:
+    def test_pilihan_menu_tidak_valid(self):
+        with patch.object(aplikasi, "daftar_produk", []), \
+             patch.object(aplikasi, "bersihkan_terminal"), \
+             patch("builtins.input", side_effect=["99", "", "0"]), \
+             contextlib.redirect_stdout(io.StringIO()) as out:
             aplikasi.main()
-        self.assertIn("Pilihan tidak tersedia", output.getvalue())
+        self.assertIn("Pilihan tidak tersedia", out.getvalue())
 
 
 if __name__ == "__main__":

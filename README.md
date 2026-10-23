@@ -1,96 +1,90 @@
-# Sistem Manajemen Toko Inventori
+# Sistem Manajemen Toko / Inventori — Toko Boria
 
-Proyek UTS Algoritma dan Struktur Data: sistem inventori toko berbasis **Python CLI**, menggunakan **array of struct** yang direpresentasikan sebagai **`list of dict`**. Data disimpan **in-memory** (tanpa database); perubahan data akan hilang setelah aplikasi ditutup.
+Proyek semester Algoritma dan Struktur Data, **Tema 1 / Tahap 1 (Array & Struct)**. Aplikasi ini membantu operator toko mengelola produk melalui Command Line Interface (CLI) Python menggunakan **Array of Struct** yang direpresentasikan sebagai satu `list of dict`. Tidak ada database atau penyimpanan file: data akan hilang saat aplikasi berhenti.
 
-## Persyaratan
+## Anggota kelompok dan pembagian tugas
 
-- Python **3.8+**
-- Git (hanya untuk clone/pull/push)
-- Tanpa dependensi pihak ketiga atau `pip install`
+| Anggota | NIM | Tanggung jawab |
+|---|---|---|
+| Andri Ahmad Iksan Ramadhani | 25083000012 | Anggota 1 — F1 Tambah Produk dan F2 Tampilkan Produk |
+| Excel Bilqissiano | 25083000016 | Anggota 2 — F3 Cari Produk dan F6 Hapus Produk |
+| Wijaya Eka Saputra | 25083000019 | Anggota 3 — F4 Update Stok, F5 Update Harga, integrasi CLI |
 
-## Menjalankan program
+## Cara menjalankan
+
+Persyaratan: **Python 3.8+** dan Git untuk mengunduh repository (tidak memerlukan `pip install`).
 
 ```bash
-git clone https://github.com/andriiahmad/uts-toko-inventoris.git
-cd uts-toko-inventoris
+git clone https://github.com/andriiahmad/asd-project-tokoinventoris-kelompok1.git
+cd asd-project-tokoinventoris-kelompok1
 python main.py
 ```
 
-Jika Windows tidak mengenali `python`, gunakan `py main.py`. Jika sudah pernah clone, jalankan `git pull origin main` dari direktori proyek untuk memperoleh perubahan terbaru.
+Di Windows dapat memakai `py main.py` jika perintah `python` tidak tersedia. Jika repository sudah pernah di-clone, gunakan `git pull origin main` di folder proyek untuk memperbarui kode.
 
-## Menu & fitur
+## Fitur Tahap 1
 
-| Menu | Fitur | Implementasi |
+| Menu | Fitur | Deskripsi |
 |---|---|---|
-| 1 | Tambah barang (F1) | Validasi nama, kategori, harga, stok, dan kode unik |
-| 2 | Tampilkan semua data (F2) | Tabel inventori + format rupiah |
-| 3 | Cari barang (F3) | Linear search berdasarkan kode/sebagian nama, tanpa membedakan kapital |
-| 4 | Update stok (F4) | Cari berdasarkan kode, stok bilangan bulat >= 0 |
-| 5 | Update harga (F5) | Cari berdasarkan kode, harga > 0 |
-| 6 | Hapus barang (F6) | Cari berdasarkan kode tepat dan konfirmasi `y` |
-| 0 | Keluar | Mengakhiri aplikasi |
+| 1 | F1 — Tambah Produk | Input `kode_produk`, `nama`, `kategori`, `harga`, `stok`. Kode unik dan wajib diinput operator. Validasi semua input. |
+| 2 | F2 — Tampilkan Semua Produk | Tabel dengan kolom **No, Kode, Nama, Kategori, Harga, Stok**; pesan khusus jika data kosong. |
+| 3 | F3 — Cari Produk | Pilih mode **kode** (exact match) atau **nama** (partial match); tampilkan detail dan jumlah hasil. |
+| 4 | F4 — Update Stok | Ganti nilai stok produk berdasarkan kode; stok bilangan bulat dan tidak negatif. |
+| 5 | F5 — Update Harga | Ganti harga produk berdasarkan kode; harga numerik lebih dari nol. |
+| 6 | F6 — Hapus Produk | Cari berdasarkan kode, tampilkan nama, minta konfirmasi `y/n` sebelum menghapus. |
+| 0 | Keluar | Mengakhiri aplikasi. |
 
-### Model data
+### Struktur data
 
-Contoh item pada satu list bersama `Barang`:
+Setiap produk memiliki **lima nama atribut wajib** sebagaimana ditulis di brief halaman 5:
 
 ```python
-{
-    "kode": "BRG001",
-    "nama_barang": "Beras Premium 5 kg",
-    "kategori": "Sembako",
-    "harga": 75000,
-    "stok": 20
+produk = {
+    "kode_produk": "PRD001",  # str, unik dan tidak kosong; format kode bebas
+    "nama": "Minyak Goreng 1L",  # str, tidak kosong
+    "kategori": "Sembako",    # str, tidak kosong
+    "harga": 15000.0,         # float, > 0
+    "stok": 50,              # int, >= 0
 }
+
+daftar_produk = [produk]     # list of dict
 ```
 
-Kode baru dibuat berurutan berdasarkan **nomor terbesar yang masih tersimpan**: `BRG001`, `BRG002`, ... `BRG1000`. Lebar minimal tiga digit; nomor yang sudah dihapus tidak otomatis digunakan kembali. Harga tampil sebagai rupiah dengan pemisah ribuan Indonesia, misalnya `Rp75.000` atau `Rp12.345,50`.
+Kode produk **diinput manual**, bukan dibuat otomatis. Produk baru disimpan ke `daftar_produk` saat aplikasi dijalankan. Ketika program ditutup, data tidak tersimpan. Harga ditampilkan dalam rupiah, misalnya `Rp 15.000,00`; saat input harga, ketik angka saja, misalnya `15000` atau `15000.5`.
 
-**Catatan input harga:** F1 menerima rupiah bilangan bulat. F5 juga menerima nilai desimal dengan tanda titik (contoh `12345.50`), dibulatkan ke dua angka desimal. Masukkan angka tanpa simbol `Rp` dan tanpa pemisah ribuan.
-
-## Struktur repository
+## Struktur file
 
 ```text
-uts-toko-inventoris/
-├── .github/workflows/tests.yml  # Otomasi pengujian
-├── .gitignore
+asd-project-tokoinventoris-kelompok1/
+├── main.py
 ├── Fitur/
-│   ├── pencarian.py             # F3
-│   ├── penghapusan.py           # F6
-│   ├── produk.py                # F1–F2
-│   └── update.py                # F4–F5
+│   ├── produk.py                 # F1, F2, format tabel
+│   ├── pencarian.py              # F3
+│   ├── update.py                 # F4, F5
+│   └── penghapusan.py            # F6
+├── tests/
+│   ├── test_produk.py
+│   ├── test_pencarian_penghapusan.py
+│   ├── test_update.py
+│   └── test_integrasi_cli.py
 ├── docs/
 │   └── anggota_2.md
-├── tests/
-│   ├── test_integrasi_cli.py
-│   ├── test_pencarian_penghapusan.py
-│   ├── test_produk.py
-│   └── test_update.py
-├── main.py                      # Entry point / menu CLI
+├── .github/workflows/tests.yml
+├── .gitignore
 └── README.md
 ```
 
 ## Pengujian
 
-Dari direktori root repository:
-
 ```bash
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-Pengujian mencakup F1–F6, kondisi data kosong, input tidak valid, kode unik, pencarian tanpa membedakan kapital, penghapusan dengan/batal konfirmasi, format rupiah, serta simulasi end-to-end CLI. Workflow GitHub Actions menjalankan rangkaian tes otomatis untuk Python 3.8 dan 3.13 pada push ke `main` atau pull request.
+Unit test memeriksa validasi F1, seluruh kolom F2, kode exact/nama partial F3, perubahan stok dan harga F4/F5, konfirmasi F6, serta alur CLI terintegrasi. GitHub Actions menjalankan unit test pada push/PR.
 
-## Anggota kelompok
+## Catatan untuk checkpoint UTS
 
-| Nama | NIM | Tanggung jawab |
-|---|---|---|
-| Andri Ahmad Iksan Ramadhani | 25083000012 | Anggota 1 — F1 & F2 |
-| Excel Bilqissiano | 25083000016 | Anggota 2 — F3 & F6 |
-| Wijaya Eka Saputra | 25083000019 | Anggota 3 — F4, F5 & integrasi CLI |
-
-## Batasan
-
-- Aplikasi adalah CLI untuk kebutuhan pembelajaran, **bukan** sistem produksi.
-- Data tidak disimpan secara permanen dan akan kembali ke data awal setelah program dijalankan ulang.
-- Menggunakan **Python Standard Library saja**.
-- File `.pyc` dan `__pycache__` merupakan cache hasil eksekusi, bukan source code, sehingga diabaikan oleh Git.
+- Nama repository saat ini: `asd-project-tokoinventoris-kelompok1`, mengikuti pola `asd-project-[tema]-[nama kelompok]`.
+- Semua anggota harus berstatus collaborator dan memiliki commit dari akun GitHub masing-masing. Verifikasi melalui pengaturan repository dan daftar kontribusi.
+- Riwayat commit asli harus menunjukkan progres bertahap; jangan memalsukan atau mengubah tanggal commit.
+- Fokus tahap ini adalah enam fitur Array of Struct. Linked List, Stack, Queue, Tree, dan Sorting dikerjakan pada tahap selanjutnya sesuai addendum dosen.

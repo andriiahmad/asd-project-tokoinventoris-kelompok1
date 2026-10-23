@@ -1,89 +1,67 @@
+"""F4 dan F5: pembaruan atribut stok dan harga produk."""
+
 import math
 
-from Fitur.produk import format_rupiah
+from Fitur.produk import cari_kode_produk, format_rupiah
 
 
-def cari_dengan_kode(barang, kode):
-    """Cari satu produk berdasarkan kode, tanpa membedakan huruf besar/kecil."""
-    kode = kode.strip().casefold()
-    for produk in barang:
-        if produk["kode"].casefold() == kode:
-            return produk
-    return None
-
-
-def ubah_stok(barang, kode, stok_baru):
-    """Kembalikan (stok_lama, stok_baru), atau None jika kode tidak ada."""
-    if isinstance(stok_baru, bool) or not isinstance(stok_baru, int) or stok_baru < 0:
+def ubah_stok(daftar_produk, kode_produk, stok_baru):
+    """Ubah stok; kembalikan (produk, stok_lama) atau None."""
+    if type(stok_baru) is not int or stok_baru < 0:
         raise ValueError("Stok harus bilangan bulat tidak negatif.")
-
-    produk = cari_dengan_kode(barang, kode)
+    produk = cari_kode_produk(daftar_produk, kode_produk)
     if produk is None:
         return None
-
     stok_lama = produk["stok"]
     produk["stok"] = stok_baru
-    return stok_lama, stok_baru
+    return produk, stok_lama
 
 
-def ubah_harga(barang, kode, harga_baru):
-    """Kembalikan (harga_lama, harga_baru), atau None jika kode tidak ada."""
+def ubah_harga(daftar_produk, kode_produk, harga_baru):
+    """Ubah harga; kembalikan (produk, harga_lama) atau None."""
     if isinstance(harga_baru, bool) or not isinstance(harga_baru, (int, float)):
-        raise ValueError("Harga harus berupa angka positif.")
-
-    if isinstance(harga_baru, int):
-        nilai = harga_baru
-    else:
-        nilai = float(harga_baru)
-        if not math.isfinite(nilai):
-            raise ValueError("Harga harus berupa angka positif yang valid.")
-        nilai = round(nilai, 2)
-    if nilai <= 0:
-        raise ValueError("Harga harus berupa angka positif yang valid.")
-
-    if isinstance(nilai, float) and nilai.is_integer():
-        nilai = int(nilai)
-
-    produk = cari_dengan_kode(barang, kode)
+        raise ValueError("Harga harus berupa angka lebih dari 0.")
+    try:
+        harga_float = float(harga_baru)
+    except OverflowError:
+        raise ValueError("Harga harus berupa angka lebih dari 0.")
+    if not math.isfinite(harga_float) or harga_float <= 0:
+        raise ValueError("Harga harus berupa angka lebih dari 0.")
+    produk = cari_kode_produk(daftar_produk, kode_produk)
     if produk is None:
         return None
-
     harga_lama = produk["harga"]
-    produk["harga"] = nilai
-    return harga_lama, nilai
+    produk["harga"] = harga_float
+    return produk, harga_lama
 
 
-def update_stok(barang):
-    kode = input("Masukkan kode barang: ").strip()
-    produk = cari_dengan_kode(barang, kode)
+def update_stok(daftar_produk):
+    kode = input("Kode produk yang diperbarui stoknya: ").strip()
+    produk = cari_kode_produk(daftar_produk, kode)
     if produk is None:
-        print("Barang tidak ditemukan.")
+        print(f"Produk dengan kode '{kode}' tidak ditemukan.")
         return
-
-    print(f"Stok saat ini: {produk['stok']}")
     try:
         stok_baru = int(input("Masukkan stok baru: ").strip())
-        lama, baru = ubah_stok(barang, kode, stok_baru)
+        hasil = ubah_stok(daftar_produk, kode, stok_baru)
     except ValueError as error:
         print(f"Input tidak valid: {error}")
         return
+    produk, stok_lama = hasil
+    print(f"Stok produk {produk['nama']} berhasil diperbarui: {stok_lama} menjadi {produk['stok']}.")
 
-    print(f"Stok berhasil diperbarui: {lama} -> {baru}.")
 
-
-def update_harga(barang):
-    kode = input("Masukkan kode barang: ").strip()
-    produk = cari_dengan_kode(barang, kode)
+def update_harga(daftar_produk):
+    kode = input("Kode produk yang diperbarui harganya: ").strip()
+    produk = cari_kode_produk(daftar_produk, kode)
     if produk is None:
-        print("Barang tidak ditemukan.")
+        print(f"Produk dengan kode '{kode}' tidak ditemukan.")
         return
-
-    print(f"Harga saat ini: {format_rupiah(produk['harga'])}")
     try:
         harga_baru = float(input("Masukkan harga baru: ").strip())
-        lama, baru = ubah_harga(barang, kode, harga_baru)
+        hasil = ubah_harga(daftar_produk, kode, harga_baru)
     except ValueError as error:
         print(f"Input tidak valid: {error}")
         return
-
-    print(f"Harga berhasil diperbarui: {format_rupiah(lama)} -> {format_rupiah(baru)}.")
+    produk, harga_lama = hasil
+    print(f"Harga produk {produk['nama']} berhasil diperbarui: {format_rupiah(harga_lama)} menjadi {format_rupiah(produk['harga'])}.")
