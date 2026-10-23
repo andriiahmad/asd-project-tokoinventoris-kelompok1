@@ -67,8 +67,6 @@ asd-project-tokoinventoris-kelompok1/
 │   ├── test_pencarian_penghapusan.py
 │   ├── test_update.py
 │   └── test_integrasi_cli.py
-├── docs/
-│   └── anggota_2.md
 ├── .github/workflows/tests.yml
 ├── .gitignore
 └── README.md
