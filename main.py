@@ -1,5 +1,7 @@
 import os
 from Fitur.produk import tambah_barang, tampilkan_barang
+from Fitur.pencarian import cari_barang
+from Fitur.penghapusan import hapus_barang
 
 
 def bersihkan_terminal():
@@ -81,6 +83,10 @@ while True:
         tambah_barang(Barang)
     elif pilihan == "2":
         tampilkan_barang(Barang)
+    elif pilihan == "3":
+        cari_barang(Barang)
+    elif pilihan == "6":
+        hapus_barang(Barang)
     else:
         print("Pilihan tidak tersedia. Silakan pilih menu 0 sampai 6.")
 
