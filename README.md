@@ -1,4 +1,4 @@
-# Sistem Manajemen Toko Inventori — Toko Boria
+# Sistem Manajemen Toko Inventori
 
 Proyek UTS Algoritma dan Struktur Data: sistem inventori toko berbasis **Python CLI**, menggunakan **array of struct** yang direpresentasikan sebagai **`list of dict`**. Data disimpan **in-memory** (tanpa database); perubahan data akan hilang setelah aplikasi ditutup.
 
