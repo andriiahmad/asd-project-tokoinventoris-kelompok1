@@ -62,23 +62,13 @@ asd-project-tokoinventoris-kelompok1/
 │   ├── pencarian.py              # F3
 │   ├── update.py                 # F4, F5
 │   └── penghapusan.py            # F6
-├── tests/
-│   ├── test_produk.py
-│   ├── test_pencarian_penghapusan.py
-│   ├── test_update.py
-│   └── test_integrasi_cli.py
-├── .github/workflows/tests.yml
 ├── .gitignore
 └── README.md
 ```
 
-## Pengujian
+## Verifikasi manual
 
-```bash
-python -m unittest discover -s tests -p "test_*.py" -v
-```
-
-Unit test memeriksa validasi F1, seluruh kolom F2, kode exact/nama partial F3, perubahan stok dan harga F4/F5, konfirmasi F6, serta alur CLI terintegrasi. GitHub Actions menjalankan unit test pada push/PR.
+Jalankan `python main.py` (atau `python3 main.py` di Debian/Linux), lalu coba menu 1 sampai 6. Pastikan validasi input, pencarian kode/nama, pembaruan stok dan harga, serta konfirmasi penghapusan bekerja sesuai brief.
 
 ## Catatan untuk checkpoint UTS
 
