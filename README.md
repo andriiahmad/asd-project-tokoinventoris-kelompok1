@@ -1,4 +1,4 @@
-# Sistem Manajemen Toko / Inventori — Toko Boria
+Toko Inventoris 
 
 Proyek semester Algoritma dan Struktur Data, **Tema 1 / Tahap 1 (Array & Struct)**. Aplikasi ini membantu operator toko mengelola produk melalui Command Line Interface (CLI) Python menggunakan **Array of Struct** yang direpresentasikan sebagai satu `list of dict`. Tidak ada database atau penyimpanan file: data akan hilang saat aplikasi berhenti.
 
