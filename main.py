@@ -1,4 +1,5 @@
 import os
+from Fitur.produk import tambah_barang, tampilkan_barang
 
 
 def bersihkan_terminal():
@@ -76,3 +77,11 @@ while True:
     if pilihan == "0":
         print("Terima kasih sudah menggunakan Toko Boria.")
         break
+    elif pilihan == "1":
+        tambah_barang(Barang)
+    elif pilihan == "2":
+        tampilkan_barang(Barang)
+    else:
+        print("Pilihan tidak tersedia. Silakan pilih menu 0 sampai 6.")
+
+    input("\nTekan Enter untuk kembali ke menu...")
