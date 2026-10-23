@@ -1,4 +1,5 @@
 import os
+import sys
 
 from Fitur.pencarian import cari_barang
 from Fitur.penghapusan import hapus_barang
@@ -7,7 +8,9 @@ from Fitur.update import update_harga, update_stok
 
 
 def bersihkan_terminal():
-    os.system("cls" if os.name == "nt" else "clear")
+    """Hindari perintah clear di terminal non-interaktif."""
+    if sys.stdout.isatty() and (os.name == "nt" or os.environ.get("TERM")):
+        os.system("cls" if os.name == "nt" else "clear")
 
 
 Barang = [
@@ -76,7 +79,7 @@ def main():
             label = f"  [{nomor}]  {nama}"
             print("|" + f"{label:<30}{keterangan:>24}" + "|")
         print("+" + "=" * lebar + "+")
-        pilihan = input("Masukkan nomor menu pilihan Anda: ")
+        pilihan = input("Masukkan nomor menu pilihan Anda: ").strip()
 
         bersihkan_terminal()
 

@@ -1,5 +1,7 @@
 import math
 
+from Fitur.produk import format_rupiah
+
 
 def cari_dengan_kode(barang, kode):
     """Cari satu produk berdasarkan kode, tanpa membedakan huruf besar/kecil."""
@@ -29,11 +31,18 @@ def ubah_harga(barang, kode, harga_baru):
     if isinstance(harga_baru, bool) or not isinstance(harga_baru, (int, float)):
         raise ValueError("Harga harus berupa angka positif.")
 
-    nilai = float(harga_baru)
-    if not math.isfinite(nilai) or nilai <= 0:
+    if isinstance(harga_baru, int):
+        nilai = harga_baru
+    else:
+        nilai = float(harga_baru)
+        if not math.isfinite(nilai):
+            raise ValueError("Harga harus berupa angka positif yang valid.")
+        nilai = round(nilai, 2)
+    if nilai <= 0:
         raise ValueError("Harga harus berupa angka positif yang valid.")
 
-    nilai = int(nilai) if nilai.is_integer() else nilai
+    if isinstance(nilai, float) and nilai.is_integer():
+        nilai = int(nilai)
 
     produk = cari_dengan_kode(barang, kode)
     if produk is None:
@@ -69,7 +78,7 @@ def update_harga(barang):
         print("Barang tidak ditemukan.")
         return
 
-    print(f"Harga saat ini: Rp{produk['harga']:,.2f}")
+    print(f"Harga saat ini: {format_rupiah(produk['harga'])}")
     try:
         harga_baru = float(input("Masukkan harga baru: ").strip())
         lama, baru = ubah_harga(barang, kode, harga_baru)
@@ -77,4 +86,4 @@ def update_harga(barang):
         print(f"Input tidak valid: {error}")
         return
 
-    print(f"Harga berhasil diperbarui: Rp{lama:,.2f} -> Rp{baru:,.2f}.")
+    print(f"Harga berhasil diperbarui: {format_rupiah(lama)} -> {format_rupiah(baru)}.")

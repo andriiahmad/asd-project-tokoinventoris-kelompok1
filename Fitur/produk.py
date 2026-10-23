@@ -1,13 +1,25 @@
-import secrets
+"""F1/F2: tambah dan tampilkan produk (list of dict)."""
 
 
 def buat_kode_barang(barang):
-    kode_yang_ada = {produk["kode"] for produk in barang}
+    """Buat kode unik berurutan, BRG001 dan seterusnya."""
+    nomor_terbesar = 0
+    for produk in barang:
+        kode = produk["kode"].upper()
+        if kode.startswith("BRG") and kode[3:].isdigit():
+            nomor_terbesar = max(nomor_terbesar, int(kode[3:]))
+    return f"BRG{nomor_terbesar + 1:03d}"
 
-    while True:
-        kode = f"BRG{secrets.randbelow(1_000_000):06d}"
-        if kode not in kode_yang_ada:
-            return kode
+
+def format_rupiah(nilai):
+    """Format rupiah dengan pemisah ribuan dan desimal Indonesia."""
+    if isinstance(nilai, int):
+        angka = f"{nilai:,}"
+    elif isinstance(nilai, float) and not nilai.is_integer():
+        angka = f"{nilai:,.2f}"
+    else:
+        angka = f"{nilai:,.0f}"
+    return "Rp" + angka.replace(",", "_").replace(".", ",").replace("_", ".")
 
 
 def tampilkan_barang(barang):
@@ -25,7 +37,7 @@ def tampilkan_barang(barang):
     baris = []
 
     for produk in barang:
-        harga = f"Rp{produk['harga']:,}".replace(",", ".")
+        harga = format_rupiah(produk["harga"])
         baris.append([
             produk["kode"],
             produk["nama_barang"],
